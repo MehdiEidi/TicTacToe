@@ -47,9 +47,8 @@ public class GameTree {
         }
 
         //Prints a node's board in a Tic Tac Toa fashion!
-        public void printTheNode() {
+        public void printTheBoard() {
             System.out.println("\n");
-
             for (int i = 0; i < 3; i++) {
                 for (int j = 0; j < 3; j++) {
                     System.out.print(board[i][j]);
@@ -68,7 +67,7 @@ public class GameTree {
     private final Node root; //Initial configuration of the game (Empty Board).
 
     /**
-     * Constructs a game tree (makes all spots empty).
+     * Constructs a game tree (makes all spots empty for initial configuration).
      */
     public GameTree() {
         String[][] board = new String[3][3];
@@ -86,13 +85,13 @@ public class GameTree {
     }
 
     //Copies one array to other.
-    private void copyArray(String[][] board, String[][] board2) {
+    private void copyArray(String[][] board1, String[][] board2) {
         for (int i = 0; i < 3; i++) {
-            System.arraycopy(board2[i], 0, board[i], 0, 3);
+            System.arraycopy(board2[i], 0, board1[i], 0, 3);
         }
     }
 
-    //Fills all children of a node based on the current configuration of the board.
+    //Fills all children of one node based on the current configuration of that board.
     private void fillChildren(Node current, boolean isX) {
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
@@ -139,7 +138,7 @@ public class GameTree {
     }
 
     /**
-     * Traverses the tree and finds scores of each node using minimax algorithm.
+     * Traverses the tree and finds score of each node using minimax algorithm.
      * @param node current node.
      * @param isMaximiser if true, the current player is the maximiser.
      * @return score of the node.
@@ -176,7 +175,7 @@ public class GameTree {
     /**
      * Evaluates the current situation of the board.
      * @param node current node.
-     * @return 1, if x has won. -1, if o has won. -5, if game is still running.
+     * @return 1, if x has won. -1, if o has won. 0, if it's a tie. -5, if game is still running.
      */
     public int evaluateBoard(Node node) {
         String[][] board = node.getBoard();
@@ -217,21 +216,16 @@ public class GameTree {
             }
         }
 
-        int countOfEmptySpots = 0;
+        //If we have at least one empty spot on the board, it means the game is still going on.
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 if (board[i][j].equals("|empty|")) {
-                    countOfEmptySpots++;
+                    return -5;
                 }
             }
         }
 
-        if (countOfEmptySpots == 0) {
-            return 0;
-        }
-
-        //-5 means game is going on
-        return -5;
+        return 0;
     }
 
     private boolean areBoardsSame(String[][] board1, String[][] board2) {
@@ -246,7 +240,7 @@ public class GameTree {
         return true;
     }
 
-    //Finds the node among other node's children using the given board.
+    //Finds the node among given node's children using the given board.
     public Node findNode(String[][] board, Node currentNode) {
         for (Node child : currentNode.getChildren()) {
             if (areBoardsSame(child.getBoard(), board)) {

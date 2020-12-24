@@ -4,7 +4,7 @@ import java.util.Random;
 
 public class TicTacToe {
     private String[][] currentStatesBoard;
-    private GameTree.Node currentStatesNode; //Current states node among the game tree nodes.
+    private GameTree.Node currentStatesNode; //Current state's node among the game tree's nodes.
     private final GameTree gameTree;
 
     /**
@@ -23,10 +23,10 @@ public class TicTacToe {
     }
 
     /**
-     * Prints the current game's state's board.
+     * Prints the current game state's board.
      */
     public void printCurrentBoard() {
-        currentStatesNode.printTheNode();
+        currentStatesNode.printTheBoard();
     }
 
     /**
@@ -61,13 +61,13 @@ public class TicTacToe {
      * @return true, if the game is still going on (there is empty spot on the board).
      */
     public boolean checkForWinner() {
-        int currentState = gameTree.evaluateBoard(currentStatesNode);
+        int currentStatesValue = gameTree.evaluateBoard(currentStatesNode);
 
-        if (currentState == 1) {
+        if (currentStatesValue == 1) {
             System.out.println("Computer Won! Shame on you!");
-        } else if (currentState == -1) {
+        } else if (currentStatesValue == -1) {
             System.out.println("You Won! Cool, you have done the impossible!");
-        } else if (currentState == 0){
+        } else if (currentStatesValue == 0){
             System.out.println("Tie!");
         } else {
             return true;
